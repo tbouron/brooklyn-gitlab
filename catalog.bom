@@ -22,7 +22,7 @@
 #
 brooklyn.catalog:
   id: gitlab-w-postgres-redis-store-and-nginx
-  version: 1.0
+  version: 1.1.0
   itemType: template
   iconUrl: https://gitlab.com/uploads/project/avatar/13083/gitlab-logo-square.png
   name: Gitlab with PostgreSQL, Redis store and Nginx
