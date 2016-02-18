@@ -32,17 +32,50 @@ brooklyn.catalog:
   issues_url: https://github.com/tbouron/brooklyn-gitlab/issues
   item:
     origin: https://gitlab.com
-    brooklyn.config:
-      gitlab.version: 7-11-stable
-      gitlab.email.from: gitlab@brooklyn.local
-      gitlab.email.display_name: GitLab powered by Brooklyn
-      gitlab.email.reply_to: gitlab@brooklyn.local
-      gitlab.db.username: git
-      gitlab.db.password: passw0rd
-      gitlab.db.database: gitlabhq_production
-      # Set the connect mode to "gitlab" to restrict TCP/IP connections from Gitlab instance only.
-      connect.mode: all
-
+    brooklyn.parameters:
+    - name: gitlab.version
+      label: Gitlab version
+      description: Version of Gitlab to deploy
+      type: string
+      default: 7-11-stable
+    - name: gitlab.email.from
+      label: Gitlab email from property
+      description: Email address Gitlab will use to send email
+      type: string
+      default: gitlab@brooklyn.local
+    - name: gitlab.email.display_name
+      label: Gitlab display name property
+      description: Display name Gitlab will use to send email
+      type: string
+      default: GitLab powered by Brooklyn
+    - name: gitlab.email.reply_to
+      label: Gitlab email to property
+      description: Email address users will reply to from an email sent by Gitlab
+      type: string
+      default: gitlab@brooklyn.local
+    - name: gitlab.db.username
+      label: Gitlab database username
+      description: The username to connect to the Gitlab database
+      type: string
+      default: git
+      contraints: required
+    - name: gitlab.db.password
+      label: Gitlab database password
+      description: The password to connect to the Gitlab database
+      type: string
+      default: passw0rd
+      contraints: required
+    - name: gitlab.db.database
+      label: Gitlab database name
+      description: The database name to connect to
+      type: string
+      default: gitlabhq_production
+      contraints: required
+    - name: connect.mode
+      label: Connect mode
+      description: Set the connect mode to "gitlab" to restrict TCP/IP connections from Gitlab instance only or "all" for any hosts
+      type: string
+      default: all
     services:
       - type: brooklyn.entity.database.postgresql.PostgreSqlNode
         id: postgresql
