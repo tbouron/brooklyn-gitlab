@@ -27,6 +27,12 @@ brooklyn.catalog:
   iconUrl: https://gitlab.com/uploads/project/avatar/13083/gitlab-logo-square.png
   name: Gitlab with PostgreSQL, Redis store and Nginx
   license: Apache-2.0
+  publish:
+    description: Pure Brooklyn YAML blueprint to deploy a Gitlab instance
+    license_code: Apache-2.0
+    overview: README.md
+    reference: reference.json
+    changelog: CHANGELOG.md
   maintainer_name: Thomas Bouron
   maintainer_email: tbouron@gmail.com
   issues_url: https://github.com/tbouron/brooklyn-gitlab/issues

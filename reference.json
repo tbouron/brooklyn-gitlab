@@ -1,0 +1,85 @@
+{
+  "entities" : [ {
+    "name" : "Gitlab with PostgreSQL, Redis store and Nginx",
+    "type" : "gitlab-w-postgres-redis-store-and-nginx:1.1.0",
+    "description" : "",
+    "iconUrl" : "https://gitlab.com/uploads/project/avatar/13083/gitlab-logo-square.png",
+    "config" : [ {
+      "name" : "gitlab.version",
+      "type" : "java.lang.String",
+      "description" : "Version of Gitlab to deploy",
+      "defaultValue" : "7-11-stable",
+      "reconfigurable" : false,
+      "label" : "Gitlab version",
+      "priority" : 0.0,
+      "links" : { }
+    }, {
+      "name" : "gitlab.email.from",
+      "type" : "java.lang.String",
+      "description" : "Email address Gitlab will use to send email",
+      "defaultValue" : "gitlab@brooklyn.local",
+      "reconfigurable" : false,
+      "label" : "Gitlab email from property",
+      "priority" : 1.0,
+      "links" : { }
+    }, {
+      "name" : "gitlab.email.display_name",
+      "type" : "java.lang.String",
+      "description" : "Display name Gitlab will use to send email",
+      "defaultValue" : "GitLab powered by Brooklyn",
+      "reconfigurable" : false,
+      "label" : "Gitlab display name property",
+      "priority" : 2.0,
+      "links" : { }
+    }, {
+      "name" : "gitlab.email.reply_to",
+      "type" : "java.lang.String",
+      "description" : "Email address users will reply to from an email sent by Gitlab",
+      "defaultValue" : "gitlab@brooklyn.local",
+      "reconfigurable" : false,
+      "label" : "Gitlab email to property",
+      "priority" : 3.0,
+      "links" : { }
+    }, {
+      "name" : "gitlab.db.username",
+      "type" : "java.lang.String",
+      "description" : "The username to connect to the Gitlab database",
+      "defaultValue" : "git",
+      "reconfigurable" : false,
+      "label" : "Gitlab database username",
+      "priority" : 4.0,
+      "links" : { }
+    }, {
+      "name" : "gitlab.db.password",
+      "type" : "java.lang.String",
+      "description" : "The password to connect to the Gitlab database",
+      "defaultValue" : "passw0rd",
+      "reconfigurable" : false,
+      "label" : "Gitlab database password",
+      "priority" : 5.0,
+      "links" : { }
+    }, {
+      "name" : "gitlab.db.database",
+      "type" : "java.lang.String",
+      "description" : "The database name to connect to",
+      "defaultValue" : "gitlabhq_production",
+      "reconfigurable" : false,
+      "label" : "Gitlab database name",
+      "priority" : 6.0,
+      "links" : { }
+    }, {
+      "name" : "connect.mode",
+      "type" : "java.lang.String",
+      "description" : "Set the connect mode to \"gitlab\" to restrict TCP/IP connections from Gitlab instance only or \"all\" for any hosts",
+      "defaultValue" : "all",
+      "reconfigurable" : false,
+      "label" : "Connect mode",
+      "priority" : 7.0,
+      "links" : { }
+    } ]
+  } ],
+  "policies" : [ ],
+  "enrichers" : [ ],
+  "locations" : [ ],
+  "locationResolvers" : [ ]
+}
