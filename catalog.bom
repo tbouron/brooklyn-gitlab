@@ -22,7 +22,7 @@
 #
 brooklyn.catalog:
   id: gitlab-w-postgres-redis-store-and-nginx
-  version: 1.1.0
+  version: 1.1.1-SNAPSHOT
   itemType: template
   iconUrl: https://gitlab.com/uploads/project/avatar/13083/gitlab-logo-square.png
   name: Gitlab with PostgreSQL, Redis store and Nginx
@@ -95,9 +95,10 @@ brooklyn.catalog:
           DB_USER: $brooklyn:config("gitlab.db.username")
           DB_PASSWORD: $brooklyn:config("gitlab.db.password")
           DB_DATABASE: $brooklyn:config("gitlab.db.database")
+          CONNECT_MODE: $brooklyn:config("connect.mode")
         post.launch.command: |
 
-          if [ $brooklyn:config("connect.mode") == "gitlab" ]; then
+          if [ "$CONNECT_MODE" == "gitlab" ]; then
             # Allow only our Gitlab instance to connect to PostgreSQL by commenting
             # the line with IP 0.0.0.0/0 and adding our own.
             sudo su -c "sed -i 's/^\(.*0\.0\.0\.0.*\)$/#\1/g' $POSTGRESQL_DATA/data/pg_hba.conf"
@@ -129,6 +130,9 @@ brooklyn.catalog:
           id: nginx
           name: Nginx server
           version: 2
+          brooklyn.config:
+            # FIXME: present for its side effect of opening a port in the security group - but changing this won't actually change the nginx config
+            nginx.http.port: 80
           install.latch: $brooklyn:component("gitlab").attributeWhenReady("service.isUp")
           install.command: |
 
