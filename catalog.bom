@@ -24,7 +24,7 @@ brooklyn.catalog:
   id: gitlab-w-postgres-redis-store-and-nginx
   version: 1.1.1-SNAPSHOT
   itemType: template
-  iconUrl: https://gitlab.com/uploads/project/avatar/13083/gitlab-logo-square.png
+  iconUrl: https://gitlab.com/gitlab-org/gitlab-ce/raw/master/app/assets/images/gitlab_logo.png
   name: Gitlab with PostgreSQL, Redis store and Nginx
   license: Apache-2.0
   publish:
@@ -35,7 +35,7 @@ brooklyn.catalog:
     changelog: CHANGELOG.md
   maintainer_name: Thomas Bouron
   maintainer_email: tbouron@gmail.com
-  issues_url: https://github.com/tbouron/brooklyn-gitlab/issues
+  issues_url: https://gitlab.com/gitlab-org/gitlab-ce/raw/master/app/assets/images/gitlab_logo.png
   item:
     origin: https://gitlab.com
     brooklyn.parameters:
