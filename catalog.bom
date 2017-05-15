@@ -22,7 +22,7 @@
 #
 brooklyn.catalog:
   id: gitlab-w-postgres-redis-store-and-nginx
-  version: 1.1.1-SNAPSHOT
+  version: 1.2.0-SNAPSHOT
   itemType: template
   iconUrl: https://gitlab.com/gitlab-org/gitlab-ce/raw/master/app/assets/images/gitlab_logo.png
   name: Gitlab with PostgreSQL, Redis store and Nginx
@@ -172,8 +172,9 @@ brooklyn.catalog:
             REDIS_HOST: $brooklyn:formatString("redis://%s:%d", component("redis").attributeWhenReady("host.address"), component("redis").attributeWhenReady("redis.port"))
             POSTGRESQL_HOST: $brooklyn:component("postgresql").attributeWhenReady("host.address")
             POSTGRESQL_PORT: $brooklyn:component("postgresql").attributeWhenReady("postgresql.port")
-            MAIL_HOST: $brooklyn.attributeWhenReady("host.address")
-            GITLAB_HOST: $brooklyn:formatString("http://%s", component("nginx").attributeWhenReady("host.address"))
+            GITLAB_HOST: $brooklyn:component("nginx").attributeWhenReady("host.address")
+            GITLAB_URL: $brooklyn:formatString("http://%s", component("nginx").attributeWhenReady("host.address"))
+            GITLAB_PORT: $brooklyn:component("nginx").config("nginx.http.port")
             GITLAB_VERSION: $brooklyn:config("gitlab.version")
             EMAIL_FROM: $brooklyn:config("gitlab.email.from")
             EMAIL_DISPLAY_NAME: $brooklyn:config("gitlab.email.display_name")
@@ -191,7 +192,7 @@ brooklyn.catalog:
             sudo apt-get upgrade -y
             sudo apt-get install -y libpq-dev build-essential zlib1g-dev libyaml-dev libssl-dev libgdbm-dev libreadline-dev libncurses5-dev libffi-dev curl openssh-server redis-server checkinstall libxml2-dev libxslt-dev libcurl4-openssl-dev libicu-dev logrotate python-docutils pkg-config cmake nodejs git-core postgresql-client jq
             # Install postfix
-            sudo debconf-set-selections <<< "postfix postfix/mailname string $MAIL_HOST"
+            sudo debconf-set-selections <<< "postfix postfix/mailname string $GITLAB_HOST"
             sudo debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
             sudo apt-get install -y postfix
             # Install ruby > 2.0
@@ -215,6 +216,8 @@ brooklyn.catalog:
 
             # Copy the example GitLab config and modify it as per as our needs
             sudo -u git -H cp config/gitlab.yml.example config/gitlab.yml
+            sudo sed -i "s/\(host:\).*$/\1 ${GITLAB_HOST}/g" config/gitlab.yml
+            sudo sed -i "s/\(port:\).*$/\1 ${GITLAB_PORT}/g" config/gitlab.yml
             sudo sed -i "s/\(email_from:\).*$/\1 ${EMAIL_FROM:-gitlab@brooklyn.local}/g" config/gitlab.yml
             sudo sed -i "s/\(email_display_name:\).*$/\1 ${EMAIL_DISPLAY_NAME:-Gitlab powered by Brooklyn}/g" config/gitlab.yml
             sudo sed -i "s/\(email_reply_to:\).*$/\1 ${EMAIL_REPLY_TO:-gitlab@brooklyn.local}/g" config/gitlab.yml
@@ -292,6 +295,9 @@ brooklyn.catalog:
             EOF
             chmod +x ~/retrieve_private_token.sh
 
+            # Configure Sendmail
+            sudo sed -i "/config.action_mailer.raise_delivery_errors = true/a\ \ config.action_mailer.default_url_options = { host: \'$GITLAB_HOST\', port: $GITLAB_PORT }" /home/git/gitlab/config/environments/production.rb
+
           launch.command: |
 
             # Start GitLab instance
@@ -353,7 +359,7 @@ brooklyn.catalog:
           - type: brooklyn.entity.software.ssh.SshCommandSensor
             brooklyn.config:
               name: gitlab.url
-              command: echo $GITLAB_HOST
+              command: echo $GITLAB_URL
               period: 30s
 
           - type: brooklyn.entity.software.ssh.SshCommandSensor
